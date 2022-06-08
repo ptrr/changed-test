@@ -2,7 +2,7 @@ name: check-version-increased
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   check-version:
