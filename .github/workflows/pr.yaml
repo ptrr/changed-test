@@ -1,0 +1,30 @@
+name: check-version-increased
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+      with:
+        path: repo
+
+    - name: Get changed files from last commit
+      uses: lots0logs/gh-action-get-changed-files@2.1.4
+      with:
+        token: ${{ github.token }}
+
+    - name: Check if VERSION and LOG.md file changed, fail if not
+      run: |
+        FILES=$(cat ${HOME}/files_modified.json | grep -E 'VERSION|LOG.md' | wc -l)
+        if [ $FILES -lt 2 ]; then
+          echo 'VERSION and/or LOG file were not changed'
+          echo 'Version increase is required for pull-requests'
+          exit 1
+        fi
