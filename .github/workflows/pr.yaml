@@ -22,7 +22,8 @@ jobs:
 
     - name: Check if VERSION and LOG.md file changed, fail if not
       run: |
-        FILES=$(cat ${HOME}/files_modified.json | grep -E 'VERSION|LOG.md' | wc -l)
+        git diff-tree --no-commit-id --name-only -r HEAD
+        git diff-tree --no-commit-id --name-only -r HEAD | grep -E 'VERSION|LOG.md' | wc -l)
         if [ $FILES -lt 2 ]; then
           echo 'VERSION and/or LOG file were not changed'
           echo 'Version increase is required for pull-requests'
